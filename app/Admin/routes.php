@@ -12,13 +12,13 @@ Route::group([
     $router->get('/', 'HomeController@index');
     $router->get('users', 'UsersController@index');                 //用户管理
 
-    $router->get('products', 'ProductsController@index');           //商品管理
+    $router->get('products', 'ProductsController@index');           //管理后台-商品管理
 
-    $router->get('products/create', 'ProductsController@create');   //创建商品列表
+    $router->get('products/create', 'ProductsController@create');   //管理后台-创建商品列表
 
     $router->post('products', 'ProductsController@store');          //添加商品
 
-    $router->get('products/{id}/edit', 'ProductsController@edit');  //编辑商品列表
+    $router->get('products/{id}/edit', 'ProductsController@edit');  //管理后台-编辑商品列表
 
     $router->put('products/{id}', 'ProductsController@update');     //修改商品
 

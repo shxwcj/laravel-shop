@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('/','PagesController@root')->name('root');
+//Route::get('/','PagesController@root')->name('root');
+Route::redirect('/', '/products')->name('root');
 
 Auth::routes(['verify' => true]);
 
@@ -28,4 +29,5 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::delete('user_addresses/{user_address}', 'UserAddressesController@destroy')->name('user_addresses.destroy');  //删除收获地址
 
+    Route::get('products', 'ProductsController@index')->name('products.index');                                 //商品列表
 });
