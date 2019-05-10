@@ -30,4 +30,6 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::delete('user_addresses/{user_address}', 'UserAddressesController@destroy')->name('user_addresses.destroy');  //删除收获地址
 
     Route::get('products', 'ProductsController@index')->name('products.index');                                 //商品列表
+
+    Route::get('products/{product}', 'ProductsController@show')->name('products.show');                         //商品详情
 });

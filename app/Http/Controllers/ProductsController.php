@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
+    /**
+     * @desc 商品列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         //创建一个查询构造器
@@ -41,5 +46,15 @@ class ProductsController extends Controller
         return view('products.index', ['products' => $products, 'filters'  => ['search' => $search, 'order'  => $order,]]);  //其中一种方式即可
 //        return view('products.index',compact('products',$products));
 //        return view('products.index')->with('products',$products);
+    }
+
+    public function show(Product $product,Request $request)
+    {
+        //判断商品是否已上架，如果没有则抛出异常
+        if (!$product->on_sale){
+            throw new \Exception('商品未上架');
+        }
+
+        return view('products.show',compact('product',$product));
     }
 }
