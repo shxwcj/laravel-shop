@@ -31,9 +31,11 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::get('products', 'ProductsController@index')->name('products.index');                                 //商品列表
 
-    Route::get('products/{product}', 'ProductsController@show')->name('products.show');                         //商品详情
-
     Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');             //收藏商品
 
     Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');     //取消收藏
+
+    Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');               //我的收藏列表
+
+    Route::get('products/{product}', 'ProductsController@show')->name('products.show');                         //商品详情
 });
