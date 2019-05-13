@@ -49,14 +49,59 @@ class ProductsController extends Controller
 //        return view('products.index')->with('products',$products);
     }
 
-    public function show(Product $product,Request $request)
+    /**
+     * @desc 商品详情
+     * @param Product $product
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws InvalidRequestException
+     */
+    public function show(Product $product,Request $request )
     {
         //判断商品是否已上架，如果没有则抛出异常
         if (!$product->on_sale){
 //            throw new \Exception('商品未上架');
             throw new InvalidRequestException('商品未上架');
         }
+        $favored = false;
+        // 用户未登录时返回的是 null，已登录时返回的是对应的用户对象
+        if ($user = $request->user()){
+            // 从当前用户已收藏的商品中搜索 id 为当前商品 id 的商品
+            // boolval() 函数用于把值转为布尔值
+            $favored = boolval($user->favoriteProducts()->find($product->id));
+        }
+        return view('products.show',['product' => $product, 'favored' => $favored]);
+    }
 
-        return view('products.show',compact('product',$product));
+    /**
+     * @desc 收藏商品
+     * @param Product $product
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function favor(Product $product,Request $request)
+    {
+        $user = $request->user();
+        if ($user->favoriteProducts()->find($product->id)){
+            return response()->json(['msg'=>'您已收藏该商品'],400);
+        }
+        $user->favoriteProducts()->attach($product);
+
+        return response()->json(['msg'=>'success'],200);
+    }
+
+    /**
+     * @desc 取消收藏商品
+     * @param Product $product
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function disfavor(Product $product,Request $request)
+    {
+        $user = $request->user();
+
+        $user->favoriteProducts()->detach($product);
+
+        return response()->json(['msg'=>'success'],200);
     }
 }
