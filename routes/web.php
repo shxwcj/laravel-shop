@@ -38,4 +38,18 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');               //我的收藏列表
 
     Route::get('products/{product}', 'ProductsController@show')->name('products.show');                         //商品详情
+
+    Route::post('cart', 'CartController@add')->name('cart.add');  //添加购物车
+
+
+
+
+
+
+
+
+
+
+
+
 });
