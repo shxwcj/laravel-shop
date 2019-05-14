@@ -43,6 +43,12 @@ class CartController extends Controller
        return view('cart.index',compact('cartItems',$cartItems));
    }
 
+    /**
+     * @desc 购物车移除
+     * @param ProductSku $sku = productSku的id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
    public function remove(ProductSku $sku,Request $request)
    {
         $request->user()->cartItems()->where('product_sku_id',$sku->id)->delete();
