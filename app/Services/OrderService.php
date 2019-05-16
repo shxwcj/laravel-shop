@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
+    /**
+     * @desc 订单添加
+     * @param User $user
+     * @param UserAddress $address
+     * @param $remark
+     * @param $items
+     * @return mixed
+     */
     public function store(User $user,UserAddress $address,$remark,$items)
     {
         //开启一个数据库事务
