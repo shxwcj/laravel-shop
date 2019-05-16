@@ -27,9 +27,9 @@
                                         </a>
                                     </div>
                                     <div>
-              <span class="product-title">
-                 <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
-              </span>
+                                      <span class="product-title">
+                                         <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
+                                      </span>
                                         <span class="sku-title">{{ $item->productSku->title }}</span>
                                     </div>
                                 </td>
