@@ -15,10 +15,11 @@ class VerifyCsrfToken extends Middleware
 
     /**
      * The URIs that should be excluded from CSRF verification.
-     *
+     * 支付宝和微信服务器端回调地址加入 CSRF 校验白名单
      * @var array
      */
     protected $except = [
         'payment/alipay/notify',
+        'payment/wechat/notify',
     ];
 }

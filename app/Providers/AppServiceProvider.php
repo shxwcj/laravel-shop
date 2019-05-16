@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         //往服务容器中注入一个名为wechat的单例对象
         $this->app->singleton('wechat_pay', function () {
             $config = config('pay.wechat');
+            $config['notify_url'] = 'http://requestbin.fullcontact.com/shop.test/orders';
             if (app()->environment() !== 'production') {
                 $config['log']['level'] = Logger::DEBUG;
             } else {
