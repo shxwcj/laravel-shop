@@ -73,6 +73,11 @@ class OrdersController extends Controller
         return $order;
     }
 
+    /**
+     * @desc 订单列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $orders = Order::query()
@@ -83,5 +88,16 @@ class OrdersController extends Controller
             ->paginate();
 
         return view('orders.index',['orders'=>$orders]);
+    }
+
+    /**
+     * @desc 订单详情
+     * @param Order $order
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(Order $order)
+    {
+        $this->authorize('own',$order);
+        return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
 }
