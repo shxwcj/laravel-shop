@@ -57,6 +57,8 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::get('payment/{order}/wechat', 'PaymentController@payByWechat')->name('payment.wechat');  //微信扫码支付
 
+    Route::post('orders/{order}/received', 'OrdersController@received')->name('orders.received');   //订单确认收货
+
 
 
 
