@@ -22,4 +22,6 @@ Route::group([
 
     $router->put('products/{id}', 'ProductsController@update');     //修改商品
 
+    $router->get('orders', 'OrdersController@index');               //订单列表
+
 });
