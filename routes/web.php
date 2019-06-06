@@ -63,12 +63,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::post('orders/{order}/review', 'OrdersController@sendReview')->name('orders.review.store'); //订单评价
 
-
-
-
-
-
-
+    Route::post('orders/{order}/apply_refund', 'OrdersController@applyRefund')->name('orders.apply_refund'); //申请退款
 
 
 });
