@@ -44,7 +44,7 @@ class Order extends Model
       'reviewed'    => 'boolean',
       'address'     => 'json',
       'ship_data'   => 'json',
-      'extra'   => 'json',
+      'extra'       => 'json'
     ];
 
     //需要转换成日期的属性
