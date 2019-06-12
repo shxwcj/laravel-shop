@@ -30,4 +30,5 @@ Route::group([
 
     $router->post('orders/{order}/refund', 'OrdersController@handleRefund')->name('admin.orders.handle_refund');//拒绝退款
 
+    $router->resource('coupon_codes','CouponCodesController');
 });
