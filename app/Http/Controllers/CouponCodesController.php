@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Exceptions\CouponCodeUnavailableException;
 use App\Models\CouponCode;
+use Illuminate\Http\Request;
 
 class CouponCodesController extends Controller
 {
@@ -12,7 +14,7 @@ class CouponCodesController extends Controller
      * @param $code
      * @return mixed
      */
-    public function show($code)
+    public function show($code,Request $request)
     {
         /*-----这行代码写在model之前的判断 开始-----*/
 //        //判断优惠券是否存在
@@ -38,7 +40,7 @@ class CouponCodesController extends Controller
         if (!$record = CouponCode::where('code', $code)->first()) {
             throw new CouponCodeUnavailableException('优惠券不存在');
         }
-        $record->checkAvailable();
+        $record->checkAvailable($request->user());
         return $record;
     }
 }
