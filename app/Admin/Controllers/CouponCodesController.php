@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Validation\Rule;
 
 class CouponCodesController extends Controller
 {
@@ -163,17 +164,50 @@ class CouponCodesController extends Controller
     protected function form()
     {
         $form = new Form(new CouponCode);
-
-        $form->text('name', '名称');
-        $form->text('code', '优惠码');
-        $form->text('type', '类型');
-        $form->decimal('value', '折扣');
-        $form->number('total', '总量');
-        $form->number('used', '已用');
-        $form->decimal('min_amount', '最低金额');
-        $form->datetime('not_before', '之前可用')->default(date('Y-m-d H:i:s'));
-        $form->datetime('not_after', '之后可用')->default(date('Y-m-d H:i:s'));
-        $form->switch('enabled', '是否启用')->default(1);
+        $form->display('id', 'ID');
+        $form->text('name', '名称')->rules('required');
+        $form->text('code', '优惠码')->rules(function ($form){
+            // 如果 $form->model()->id 不为空，代表是编辑操作
+            if ($id = $form->model()->id) {
+                return 'nullable|unique:coupon_codes,code,'.$id.',id';
+            } else {
+                return 'nullable|unique:coupon_codes';
+            }
+        });
+        $form->radio('type', '类型')->options(CouponCode::$typeMap)->rules('required')->default(CouponCode::TYPE_FIXED);
+        $form->text('value', '折扣')->rules(function ($form) {
+            if (request()->input('type') === CouponCode::TYPE_PERCENT) {
+                // 如果选择了百分比折扣类型，那么折扣范围只能是 1 ~ 99
+                return 'required|numeric|between:1,99';
+            } else {
+                // 否则只要大等于 0.01 即可
+                return 'required|numeric|min:0.01';
+            }
+        });
+        $form->text('total', '总量')->rules('required|numeric|min:0');
+        $form->text('min_amount', '最低金额')->rules('required|numeric|min:0');
+        $form->datetime('not_before', '开始时间')->default(date('Y-m-d'));
+        $form->datetime('not_after', '结束时间')->default(date('Y-m-d'));
+        $form->radio('enabled', '启用')->options(['1' => '是', '0' => '否']);
+        $form->saving(function (Form $form){
+            if (!$form->code){
+                $form->code = CouponCode::findAvailableCode();
+            }
+        });
+        $form->tools(function (Form\Tools $tools) {
+            // 去掉`删除`按钮
+            $tools->disableDelete();
+            // 去掉`查看`按钮
+            $tools->disableView();
+        });
+        $form->footer(function ($footer) {
+            // 去掉`查看`checkbox
+            $footer->disableViewCheck();
+            // 去掉`继续编辑`checkbox
+            $footer->disableEditingCheck();
+            // 去掉`继续创建`checkbox
+            $footer->disableCreatingCheck();
+        });
         return $form;
     }
 }
