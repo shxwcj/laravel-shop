@@ -119,7 +119,6 @@ class PaymentController extends Controller
      */
     public function wechatNotify()
     {
-
         // 校验回调参数是否正确
         $data  = app('wechat_pay')->verify();
         // 找到对应的订单

@@ -17,6 +17,11 @@ class Product extends Model
        return $this->hasMany(ProductSku::class);
    }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     /**
      * @desc 获取图片链接属性 image_url下划线的形式会被解析成驼峰式命名
      * @return mixed

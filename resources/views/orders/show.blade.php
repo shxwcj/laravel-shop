@@ -27,9 +27,9 @@
                                         </a>
                                     </div>
                                     <div>
-                                      <span class="product-title">
-                                         <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
-                                      </span>
+              <span class="product-title">
+                 <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
+              </span>
                                         <span class="sku-title">{{ $item->productSku->title }}</span>
                                     </div>
                                 </td>
@@ -57,7 +57,7 @@
                                     <div class="line-value">{{ $order->ship_data['express_company'] }} {{ $order->ship_data['express_no'] }}</div>
                                 </div>
                             @endif
-                            <!-- 订单已支付，且退款状态不是未退款时展示退款信息 -->
+                        <!-- 订单已支付，且退款状态不是未退款时展示退款信息 -->
                             @if($order->paid_at && $order->refund_status !== \App\Models\Order::REFUND_STATUS_PENDING)
                                 <div class="line">
                                     <div class="line-label">退款状态：</div>
@@ -68,6 +68,7 @@
                                     <div class="line-value">{{ $order->extra['refund_reason'] }}</div>
                                 </div>
                             @endif
+                        </div>
                         <div class="order-summary text-right">
                             <!-- 展示优惠信息开始 -->
                             @if($order->couponCode)
@@ -95,22 +96,6 @@
                                     @else
                                         未支付
                                     @endif
-                                    <!-- 如果订单的发货状态为已发货则展示确认收货按钮 -->
-                                        @if($order->ship_status === \App\Models\Order::SHIP_STATUS_DELIVERED)
-                                            <div class="receive-button">
-                                                <form method="post" action="{{ route('orders.received', [$order->id]) }}">
-                                                    <!-- csrf token 不能忘 -->
-                                                    {{ csrf_field() }}
-                                                    <button type="submit" class="btn btn-sm btn-success">确认收货</button>
-                                                </form>
-                                            </div>
-                                        @endif
-                                    <!-- 订单已支付，且退款状态是未退款时展示申请退款按钮 -->
-                                        @if($order->paid_at && $order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
-                                            <div class="refund-button">
-                                                <button class="btn btn-sm btn-danger" id="btn-apply-refund">申请退款</button>
-                                            </div>
-                                        @endif
                                 </div>
                             </div>
                             @if(isset($order->extra['refund_disagree_reason']))
@@ -119,14 +104,27 @@
                                     <div class="value">{{ $order->extra['refund_disagree_reason'] }}</div>
                                 </div>
                             @endif
-                            <!-- 支付按钮开始 -->
+                        <!-- 支付按钮开始 -->
                             @if(!$order->paid_at && !$order->closed)
                                 <div class="payment-buttons">
                                     <a class="btn btn-primary btn-sm" href="{{ route('payment.alipay', ['order' => $order->id]) }}">支付宝支付</a>
                                     <button class="btn btn-sm btn-success" id='btn-wechat'>微信支付</button>
                                 </div>
-                        @endif
+                            @endif
                         <!-- 支付按钮结束 -->
+                            <!-- 如果订单的发货状态为已发货则展示确认收货按钮 -->
+                            @if($order->ship_status === \App\Models\Order::SHIP_STATUS_DELIVERED)
+                                <div class="receive-button">
+                                    <!-- 将原本的表单替换成下面这个按钮 -->
+                                    <button type="button" id="btn-receive" class="btn btn-sm btn-success">确认收货</button>
+                                </div>
+                            @endif
+                        <!-- 订单已支付，且退款状态是未退款时展示申请退款按钮 -->
+                            @if($order->paid_at && $order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
+                                <div class="refund-button">
+                                    <button class="btn btn-sm btn-danger" id="btn-apply-refund">申请退款</button>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -202,4 +200,3 @@
         });
     </script>
 @endsection
-

@@ -67,7 +67,6 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
     Route::get('coupon_codes/{code}', 'CouponCodesController@show')->name('coupon_codes.show');  //优惠券详情
 });
-
 Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify'); //支付宝服务器端回调
 
 Route::post('payment/wechat/notify', 'PaymentController@wechatNotify')->name('payment.wechat.notify'); //微信服务器端回调
