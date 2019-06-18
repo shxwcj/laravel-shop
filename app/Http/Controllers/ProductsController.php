@@ -6,6 +6,7 @@ use App\Exceptions\InvalidRequestException;
 use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -60,7 +61,13 @@ class ProductsController extends Controller
             }
         }
         $products = $builder->paginate(16);
-        return view('products.index', ['products' => $products, 'filters'  => ['search' => $search, 'order'  => $order,],'category'=>$category??null]);  //其中一种方式即可
+        return view('products.index', [
+            'products' => $products,
+            'filters'  => ['search' => $search, 'order'  => $order,],
+            'category'=>$category??null,
+//            'categoryTree'=>$categoryService->getCategoryTree(),// 将类目树传递给模板文件  此已封装方法
+        ]);  //其中一种方式即可
+
 //        return view('products.index',compact('products',$products));
 //        return view('products.index')->with('products',$products);
     }
