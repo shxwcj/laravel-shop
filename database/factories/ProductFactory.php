@@ -3,6 +3,8 @@
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
 use App\Models\Product;
+use App\Models\Category;
+
 use Faker\Generator as Faker;
 
 $factory->define(Product::class, function (Faker $faker) {
@@ -18,6 +20,8 @@ $factory->define(Product::class, function (Faker $faker) {
         "https://iocaffcdn.phphub.org/uploads/images/201806/01/5320/2JMRaFwRpo.jpg",
         "https://iocaffcdn.phphub.org/uploads/images/201806/01/5320/pa7DrV43Mw.jpg",
     ]);
+    // 从数据库中随机取一个类目
+    $category = Category::query()->where('is_directory', false)->inRandomOrder()->first();
     return [
         'title'             => $faker->word,
         'description'       => $faker->sentence,
@@ -27,5 +31,6 @@ $factory->define(Product::class, function (Faker $faker) {
         'sold_count'        => 0,
         'review_count'      => 0,
         'price'             => 0,
+        'category_id'       => $category ? $category->id : null,
     ];
 });
