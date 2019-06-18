@@ -11,6 +11,7 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
     $router->get('users', 'UsersController@index');                 //用户管理
+    $router->get('api/categories', 'CategoriesController@apiIndex');//商品类目加载
 
     $router->get('products', 'ProductsController@index');           //管理后台-商品管理
 
@@ -30,5 +31,7 @@ Route::group([
 
     $router->post('orders/{order}/refund', 'OrdersController@handleRefund')->name('admin.orders.handle_refund');//拒绝退款
 
-    $router->resource('coupon_codes','CouponCodesController');
+    $router->resource('coupon_codes','CouponCodesController');//优惠券管理
+
+    $router->resource('categories','CategoriesController');//商品类目管理
 });
