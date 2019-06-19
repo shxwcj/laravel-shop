@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\Types\Self_;
 use Ramsey\Uuid\Uuid;
 
 class Order extends Model
@@ -18,6 +19,10 @@ class Order extends Model
     const SHIP_STATUS_PENDING = 'pending';
     const SHIP_STATUS_DELIVERED = 'delivered';
     const SHIP_STATUS_RECEIVED = 'received';
+
+    //订单状态
+    const TYPE_NORMAL = 'normal';
+    const TYPE_CROWDFUNDING = 'crowdfunding';
 
     //退款状态属性
     public static $refundStatusMap = [
@@ -35,8 +40,14 @@ class Order extends Model
         self::SHIP_STATUS_RECEIVED => '已收货',
     ];
 
+    //订单状态属性
+    public static $typeMap = [
+        self::TYPE_NORMAL => '普通商品订单',
+        self::TYPE_CROWDFUNDING => '众筹商品订单',
+    ];
+
     //批量赋值
-    protected $fillable = ['no','address','total_amount', 'remark', 'paid_at','payment_method','payment_no','refund_status','refund_no', 'closed','reviewed','ship_status','ship_data','extra'];
+    protected $fillable = ['type','no','address','total_amount', 'remark', 'paid_at','payment_method','payment_no','refund_status','refund_no', 'closed','reviewed','ship_status','ship_data','extra'];
 
     //属性类型转换
     protected $casts = [
