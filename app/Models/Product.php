@@ -46,8 +46,11 @@ class Product extends Model
        if (Str::startsWith($this->attributes['image'],['http://','https://'])){ //Str::startWith:确定给定的字符串是否以给定的子字符串开始
            return $this->attributes['image'];
        }
-       return \Storage::disk('public')->url($this->attributes['image']);
+       return \Storage::disk('public')->url($this->attributes['image']); //由于创建图片软连接 故要映射到storage目录下
    }
 
-
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = strip_tags($value);
+    }
 }
