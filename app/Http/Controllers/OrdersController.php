@@ -7,6 +7,7 @@ use App\Exceptions\InternalException;
 use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\Admin\HandleRefundRequest;
 use App\Http\Requests\ApplyRefundRequest;
+use App\Http\Requests\CrowdFundingOrderRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\SendReviewRequest;
 use App\Jobs\CloseOrder;
@@ -238,5 +239,19 @@ class OrdersController extends Controller
         return $order;
     }
 
+    /**
+     * 创建一个新的方法用于接受众筹商品下单请求
+     * @param CrowdFundingOrderRequest $request
+     * @param OrderService $orderService
+     * @return mixed
+     */
+    public function crowdfunding(CrowdFundingOrderRequest $request,OrderService $orderService)
+    {
+        $user = $request->user();
+        $sku = ProductSku::find($request->sku_id);
+        $address = UserAddress::find($request->address_id);
+        $amount = $request->amount;
 
+        return $orderService->crowdfunding($user,$address,$sku,$amount);
+    }
 }

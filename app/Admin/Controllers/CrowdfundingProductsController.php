@@ -235,7 +235,7 @@ class CrowdfundingProductsController extends CommonProductsController
 
 
 /*---------------------代码封装后-----------------------------------开始*/
-    // 移除 HasResourceActions  // 移除 `index()` / `create()` / `edit()` / `detail()` 这四个方法
+    // 移除 HasResourceActions  // 移除 `index()` / `create()` / `edit()` / `detail()` / `destroy()`这五个方法
     public function getProductType()
     {
         return Product::TYPE_CROWDFUNDING;

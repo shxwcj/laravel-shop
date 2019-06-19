@@ -10,6 +10,8 @@ class UserAddress extends Model
 
     protected $dates = ['last_used_at']; //表示 last_used_at 字段是一个时间日期类型
 
+    protected $appends = ['full_address'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
