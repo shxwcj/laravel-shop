@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\HandleRefundRequest;
 use App\Models\CrowdfundingProduct;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
+use App\Services\OrderService;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
@@ -122,7 +123,7 @@ class OrdersController extends Controller
      * @return Order
      * @throws InvalidRequestException
      */
-    public function handleRefund(Order $order,HandleRefundRequest $request)
+    public function handleRefund(Order $order,HandleRefundRequest $request,OrderService $orderService)
     {
         //判断订单状态是否正确
         if ($order->refund_status !== Order::REFUND_STATUS_APPLIED){
@@ -137,7 +138,9 @@ class OrdersController extends Controller
                 'extra'  =>  $extra,
             ]);
             //调用退款逻辑
-            $this->_refundOrder($order);
+            /*$this->_refundOrder($order); 封装方法之前*/
+            //改为调用封装的方法
+            $orderService->refundOrder($order);
         }else{
             //将拒绝退款理由写在extra字段中
             $extra = $order->extra ?:[];
@@ -151,7 +154,7 @@ class OrdersController extends Controller
         return $order;
     }
 
-    protected function _refundOrder(Order $order)
+   /* protected function _refundOrder(Order $order)
     {
         //判断该订单的支付方式
         switch ($order->payment_method){
@@ -164,8 +167,8 @@ class OrdersController extends Controller
                     'refund_fee'    =>   $order->total_amount * 100, // 要退款的订单金额，单位分
                     'out_refund_no' =>   $refundNo, // 退款订单号
                     // 微信支付的退款结果并不是实时返回的，而是通过退款回调来通知，因此这里需要配上退款回调接口地址
-//                    'notify_url'    =>  route('payment.wechat.refund_notify'), // 由于是开发环境，需要配成 requestbin 地址
-                    'notify_url'    =>  ngrok_url('payment.wechat.refund_notify'), // 暂时用ngrok来测试回调
+                    'notify_url'    =>  route('payment.wechat.refund_notify'), // 由于是开发环境，需要配成 requestbin 地址
+//                    'notify_url'    =>  ngrok_url('payment.wechat.refund_notify'), // 暂时用ngrok来测试回调
                 ]);
                 //将订单状态改成退款中
                 $order->update([
@@ -206,5 +209,5 @@ class OrdersController extends Controller
                 throw new InternalException('未知订单支付方式:'.$order->payment_method);
                 break;
         }
-    }
+    }*/
 }
