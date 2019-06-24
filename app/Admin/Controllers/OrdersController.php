@@ -112,7 +112,12 @@ class OrdersController extends Controller
                 $batch->disableDelete();
             });
         });
-
+        $grid->filter(function($filter){
+            $filter->disableIdFilter();
+            $filter->like('no','订单流水号');
+            $filter->between('total_amount', '总金额');
+            $filter->date('paid_at', '支付时间');
+        });
         return $grid;
     }
 
