@@ -185,6 +185,15 @@ class PaymentController extends Controller
         return app('wechat_pay')->success();
     }
 
+    /**
+     * @desc 分期付款
+     * @param Order $order
+     * @param Request $request
+     * @return Installment
+     * @throws InvalidRequestException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function payByInstallment(Order $order,Request $request)
     {
         //校验权限
