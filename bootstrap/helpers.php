@@ -10,7 +10,7 @@ function route_class()
 }
 
 /**
- * @desc 配置暂时的公关内网环境
+ * @desc 配置暂时的公关外网环境
  * @param $routeName
  * @param array $parameters
  * @return string
