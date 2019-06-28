@@ -24,6 +24,7 @@ $factory->define(Product::class, function (Faker $faker) {
     $category = Category::query()->where('is_directory', false)->inRandomOrder()->first();
     return [
         'title'             => $faker->word,
+        'long_title'        => $faker->sentence,
         'description'       => $faker->sentence,
         'image'             => $image,
         'on_sale'           => true,
