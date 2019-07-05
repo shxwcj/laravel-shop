@@ -10,12 +10,14 @@ use Illuminate\Support\Str;
 class Product extends Model
 {
     //定义商品的2种状态
-    const TYPE_NORMAL = 'normal';
-    const TYPE_CROWDFUNDING = 'crowdfunding';
+    const TYPE_NORMAL       = 'normal';               //普通商品
+    const TYPE_CROWDFUNDING = 'crowdfunding';   //众筹商品
+    const TYPE_SECKILL      = 'seckill';             //秒杀商品
 
     public static $typeMap = [
         self::TYPE_NORMAL  => '普通商品',
         self::TYPE_CROWDFUNDING => '众筹商品',
+        self::TYPE_SECKILL => '秒杀商品',
     ];
 
    protected $fillable = ['title','long_title','description','image','on_sale','rating','sold_count','review_count','type'];
@@ -40,6 +42,11 @@ class Product extends Model
     public function properties()
     {
         return $this->hasMany(ProductProperty::class);
+    }
+
+    public function seckill()
+    {
+        return $this->hasOne(SeckillProduct::class);
     }
 
     /**
@@ -103,4 +110,6 @@ class Product extends Model
 
         return $arr;
     }
+
+
 }
