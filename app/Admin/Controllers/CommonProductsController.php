@@ -143,6 +143,73 @@ abstract  class CommonProductsController extends Controller
         $show->sold_count('销量');
         $show->review_count('评价数');
         $show->price('价格');
+
+        // 调用自定义方法
+        $this->customShow($show);
+
+        $show->skus('商品 SKU', function ($skus) {
+            $skus->title('SKU 名称');
+            $skus->description('SKU 描述');
+            $skus->price('单价');
+            $skus->stock('剩余库存');
+
+            // 禁用筛选功能
+            $skus->disableFilter();
+            // 禁用导出功能
+            $skus->disableExport();
+            //禁用创建按钮
+            $skus->disableCreateButton();
+            //禁用扩展功能
+            $skus->disableTools();
+            //禁用操作功能
+            $skus->disableActions();
+
+            $skus->tools(function ($tools) {
+                // 禁用批量删除按钮
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
+            $skus->actions(function ($actions){
+                // 不在每一行后面展示查看按钮
+                $actions->disableView();
+                // 不在每一行后面展示删除按钮
+                $actions->disableDelete();
+                // 不在每一行后面展示编辑按钮
+                $actions->disableEdit();
+            });
+        });
+
+        $show->properties('商品属性',function ($properties){
+            $properties->name('属性名');
+            $properties->value('属性值');
+
+            // 禁用筛选功能
+            $properties->disableFilter();
+            // 禁用导出功能
+            $properties->disableExport();
+            //禁用创建按钮
+            $properties->disableCreateButton();
+            //禁用扩展功能
+            $properties->disableTools();
+            //禁用操作功能
+            $properties->disableActions();
+
+            $properties->tools(function ($tools) {
+                // 禁用批量删除按钮
+                $tools->batch(function ($batch) {
+                    $batch->disableDelete();
+                });
+            });
+            $properties->actions(function ($actions){
+                // 不在每一行后面展示查看按钮
+                $actions->disableView();
+                // 不在每一行后面展示删除按钮
+                $actions->disableDelete();
+                // 不在每一行后面展示编辑按钮
+                $actions->disableEdit();
+            });
+        });
         return $show;
     }
 
@@ -218,6 +285,8 @@ abstract  class CommonProductsController extends Controller
         $crowdfunding = $product->type;
         if ($crowdfunding == Product::TYPE_CROWDFUNDING) {
             $product->crowdfunding()->delete();
+        }elseif ($crowdfunding == Product::TYPE_SECKILL){
+            $product->seckill()->delete();
         }
         $product->skus()->delete();
         if ($this->form()->destroy($id)) {
