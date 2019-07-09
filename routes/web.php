@@ -96,7 +96,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::post('crowdfunding_orders', 'OrdersController@crowdfunding')->name('crowdfunding_orders.store');
 
     //秒杀订单
-    Route::post('seckill_orders', 'OrdersController@seckill')->name('seckill_orders.store');
+    Route::post('seckill_orders', 'OrdersController@seckill')->name('seckill_orders.store')->middleware('random_drop:80');
 
     //分期付款
     Route::post('payment/{order}/installment', 'PaymentController@payByInstallment')->name('payment.installment');
