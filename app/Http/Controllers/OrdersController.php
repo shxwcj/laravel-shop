@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\HandleRefundRequest;
 use App\Http\Requests\ApplyRefundRequest;
 use App\Http\Requests\CrowdFundingOrderRequest;
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\SeckillOrderRequest;
 use App\Http\Requests\SendReviewRequest;
 use App\Jobs\CloseOrder;
 use App\Models\CouponCode;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\DB;
 class OrdersController extends Controller
 {
     /**
-     * @desc 订单添加 未封装前
+     * @desc 普通商品订单添加 未封装前
      * @param OrderRequest $request
      * @return mixed
      */
@@ -190,7 +191,7 @@ class OrdersController extends Controller
         }
         $reviews = $request->input('reviews');
         // 开启事务
-        \DB::transaction(function () use ($reviews, $order) {
+        DB::transaction(function () use ($reviews, $order) {
             // 遍历用户提交的数据
             foreach ($reviews as $review) {
                 $orderItem = $order->items()->find($review['id']);
@@ -244,7 +245,7 @@ class OrdersController extends Controller
     }
 
     /**
-     * 创建一个新的方法用于接受众筹商品下单请求
+     * 众筹商品订单添加
      * @param CrowdFundingOrderRequest $request
      * @param OrderService $orderService
      * @return mixed
@@ -257,5 +258,20 @@ class OrdersController extends Controller
         $amount = $request->amount;
 
         return $orderService->crowdfunding($user,$address,$sku,$amount);
+    }
+
+    /**
+     * 秒杀商品订单添加
+     * @param SeckillOrderRequest $request
+     * @param OrderService $orderService
+     * @return mixed
+     */
+    public function seckill(SeckillOrderRequest $request,OrderService $orderService)
+    {
+        $user    = $request->user();
+        $address = UserAddress::find($request->input('address_id'));
+        $sku     = ProductSku::find($request->input('sku_id'));
+
+        return $orderService->seckill($user, $address, $sku);
     }
 }

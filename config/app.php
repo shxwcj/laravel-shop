@@ -43,6 +43,7 @@ return [
     'debug' => env('APP_DEBUG', false),
 
     'order_ttl' => 1800,
+    'seckill_order_ttl' => 600,
 
     /**
      * 分期付款的基础配置
